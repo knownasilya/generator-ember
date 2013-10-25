@@ -60,14 +60,53 @@ EmberGenerator.prototype.askFor = function askFor() {
   var cb = this.async();
 
   var prompts = [{
+    type: 'list',
+    name: 'cssPreprocessor',
+    message: 'Which CSS pre-processor would you like to include?',
+    choices: [
+      'Sass with Compass',
+      'LESS',
+      'Stylus',
+      'None (just use CSS)'
+    ],
+    default: 0
+  }, {
     type: 'confirm',
-    name: 'compassBootstrap',
-    message: 'Would you like to include Twitter Bootstrap for Sass?',
+    name: 'bootstrap',
+    message: 'Would you like to include Twitter\'s Bootstrap',
     default: true
+  }, {
+    type: 'confirm',
+    name: 'bootstrapSass',
+    message: 'Would you like to use the Sass version of Bootstrap?',
+    default: true,
+    when: function (props) {
+      return props.cssPreprocessor === 'Sass with Compass' && props.bootstrap;
+    }
+  }, {
+    type: 'confirm',
+    name: 'bootstrapLess',
+    message: 'Would you like to use the LESS version of Bootstrap?',
+    default: true,
+    when: function (props) {
+      return props.cssPreprocessor === 'LESS' && props.bootstrap;
+    }
+  }, {
+    type: 'confirm',
+    name: 'bootstrapStylus',
+    message: 'Would you like to use the Stylus version of Bootstrap?',
+    default: true,
+    when: function (props) {
+      return props.cssPreprocessor === 'Stylus' && props.bootstrap;
+    }
   }];
 
   this.prompt(prompts, function (props) {
-    this.compassBootstrap = props.compassBootstrap;
+    this.cssPreprocessor = props.cssPreprocessor;
+    this.bootstrap = props.bootstrap;
+    this.bootstrapSass = props.bootstrapSass;
+    this.bootstrapLess = props.bootstrapLess;
+    this.bootstrapStylus = props.bootstrapStylus;
 
     cb();
   }.bind(this));
