@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "dependencies": {
     "ember": "1.0.0",
-    "ember-data-shim": "1.0.0-beta.2"<% if (compassBootstrap) { %>,
-    "bootstrap-sass": "~3.0.0"
-    <% } %>
+    "ember-data-shim": "1.0.0-beta.2"<% if (bootstrapSass) { %>,
+    "bootstrap-sass": "~3.0.0"<% } if (bootstrapLess) { %>
+    "strapless": "~3.0.0"<% } if (bootstrapStylus) { %>
+    "bootstrap-stylus": "~3.0.0"<% } %>
   },
   "resolutions": {
     "ember": "1.0.0"
