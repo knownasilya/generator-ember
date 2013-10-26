@@ -37,7 +37,7 @@ describe('Compass', function () {
         ]
       ]);
       helpers.mockPrompt(this.ember.app, {
-        'compassBootstrap': true
+        'cssPreprocessor': 'Sass with Compass'
       });
       this.ember.app.options['coffee'] = false;
       this.ember.app.options['skip-install'] = true;
@@ -48,7 +48,7 @@ describe('Compass', function () {
   describe('compass', function () {
     it('creates expected files without compassSass', function (done) {
       helpers.mockPrompt(this.ember.app, {
-        'compassBootstrap': false
+        'cssPreprocessor': 'LESS'
       });
       this.ember.app.run({}, function () {
         helpers.assertFiles(EXPECTED_FILES);

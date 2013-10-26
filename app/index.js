@@ -64,10 +64,19 @@ EmberGenerator.prototype.askFor = function askFor() {
     name: 'cssPreprocessor',
     message: 'Which CSS pre-processor would you like to include?',
     choices: [
-      'Sass with Compass',
-      'LESS',
-      'Stylus',
-      'None (just use CSS)'
+      {
+        key: 'sass',
+        value: 'Sass with Compass'
+      }, {
+        key: 'less',
+        value: 'LESS'
+      }, {
+        key: 'stylus',
+        value: 'Stylus'
+      }, {
+        key: 'none',
+        value: 'None (just use CSS)'
+      }
     ],
     default: 0
   }, {
@@ -168,7 +177,7 @@ EmberGenerator.prototype.templates = function templates() {
 
 EmberGenerator.prototype.writeIndex = function writeIndex() {
   var mainCssFiles = [];
-  if (this.compassBootstrap) {
+  if (this.bootstrap) {
     mainCssFiles.push('styles/style.css');
   } else {
     mainCssFiles.push('styles/normalize.css');
@@ -184,7 +193,7 @@ EmberGenerator.prototype.writeIndex = function writeIndex() {
 };
 
 EmberGenerator.prototype.bootstrapJavaScript = function bootstrapJavaScript() {
-  if (!this.compassBootstrap) {
+  if (!this.bootstrap) {
     return;  // Skip if disabled.
   }
   // Wire Twitter Bootstrap plugins
@@ -206,10 +215,16 @@ EmberGenerator.prototype.bootstrapJavaScript = function bootstrapJavaScript() {
 
 EmberGenerator.prototype.all = function all() {
   this.write('app/index.html', this.indexFile);
-
-  if (this.compassBootstrap) {
-    this.copy('styles/style_bootstrap.scss', 'app/styles/style.scss');
-  } else {
+    
+  if (this.bootstrap) {
+    if (this.bootstrapSass) {
+      this.copy('styles/style_bootstrap.scss', 'app/styles/style.scss');
+    } else if (this.bootstrapLess) {
+      this.copy('styles/style_bootstrap.less', 'app/styles/style.less');
+    } else if (this.bootstrapStylus) {
+      this.copy('styles/style_bootstrap.styl', 'app/styles/style.styl');
+    }
+  } else {    
     this.copy('styles/normalize.css', 'app/styles/normalize.css');
     this.copy('styles/style.css', 'app/styles/style.css');
   }

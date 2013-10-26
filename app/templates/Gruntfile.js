@@ -38,11 +38,19 @@ module.exports = function (grunt) {
             coffeeTest: {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
-            },
+            },<% if (cssPreprocessor === 'Sass with Compass') { %>
             compass: {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass:server']
-            },
+            },<% } else if (cssPreprocessor === 'LESS') { %>
+            less: {
+                files: ['<%%= yeoman.app %>/styles/{,*/}*.{less}'],
+                tasks: ['less:server']
+            },<% } else if (cssPreprocessor === 'Stylus') { %>
+            stylus: {
+                files: ['<%%= yeoman.app %>/styles/{,*/}*.{styl}'],
+                tasks: ['stylus:server']
+            },<% } %>
             neuter: {<% if (!options.coffee) { %>
                 files: ['<%%= yeoman.app %>/scripts/{,*/}*.js'],<% }else{ %>
                 files: ['.tmp/scripts/{,*/}*.js',
@@ -162,7 +170,7 @@ module.exports = function (grunt) {
                     ext: '.js'
                 }]
             }
-        },
+        },<% if (cssPreprocessor === 'Sass with Compass') { %>
         compass: {
             options: {
                 sassDir: '<%%= yeoman.app %>/styles',
@@ -183,7 +191,21 @@ module.exports = function (grunt) {
                     debugInfo: true
                 }
             }
-        },
+        },<% } else if (cssPreprocessor === 'LESS') { %>
+        less: {
+            server: {
+                options: {
+                    paths: ['<%%= yeoman.app %>/styles']
+                }
+            }
+        },<% } else if (cssPreprocessor === 'Stylus') { %>
+        stylus: {
+            server: {
+                options: {
+                    paths: ['<%%= yeoman.app %>/styles']
+                }
+            }
+        },<% } %>
         // not used since Uglify task does concat,
         // but still available if needed
         /*concat: {
@@ -291,18 +313,24 @@ module.exports = function (grunt) {
         concurrent: {
             server: [
                 'emberTemplates',
-                'coffee:dist',
-                'compass:server'
+                'coffee:dist',<% if (cssPreprocessor === 'Sass with Compass') { %>
+                'compass:server',<% } else if (cssPreprocessor === 'LESS') { %>
+                'less:server',<% } else if (cssPreprocessor === 'Stylus') { %>
+                'stylus:server'<% } %>
             ],
             test: [
                 'emberTemplates',
-                'coffee',
-                'compass'
+                'coffee',<% if (cssPreprocessor === 'Sass with Compass') { %>
+                'compass',<% } else if (cssPreprocessor === 'LESS') { %>
+                'less',<% } else if (cssPreprocessor === 'Stylus') { %>
+                'stylus'<% } %>
             ],
             dist: [
                 'emberTemplates',
-                'coffee',
-                'compass:dist',
+                'coffee',<% if (cssPreprocessor === 'Sass with Compass') { %>
+                'compass:dist',<% } else if (cssPreprocessor === 'LESS') { %>
+                'less:dist',<% } else if (cssPreprocessor === 'Stylus') { %>
+                'stylus:dist',<% } %>
                 'imagemin',
                 'svgmin',
                 'htmlmin'
